@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <h1>Booking Confirmation</h1>
+    <p>Dear User,</p>
+    <p>Your booking details are as follows:</p>
+    <ul>
+        <li>Show: {{ booking.show }}</li>
+        <li>Number of Tickets: {{ booking.number_of_tickets }}</li>
+        <li>Total Amount: {{ booking.total_amount }}</li>
+        <li>Time: {{ booking.show.time }}</li>
+        <li>Ticket Price: {{ booking.ticket_price }}</li>
+        <li>Razorpay Order ID: {{ booking.razorpay_order_id }}</li>
+        <li>Payment Status: {{ booking.payment_status }}</li>
+    </ul>
+    <p>Thank you for choosing our service.</p>
+    <img src="cid:qr_code" alt="QR Code">
+</body>
+</html>
