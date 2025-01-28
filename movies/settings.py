@@ -87,14 +87,13 @@ WSGI_APPLICATION = 'movies.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'defaultdb',
-        'USER': 'avnadmin',
-        'PASSWORD': 'AVNS_Of7B3hNXfbKhrRH-Obn',
-        'HOST': 'mysql-22b2fb3-cjebin9-0bc9.d.aivencloud.com',
-        'PORT': '10820',
+        'NAME': 'nn',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -201,4 +200,7 @@ STATICFILES_DIRS = [
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+
+SITE_URL = 'http://127.0.0.1:8000'
 
