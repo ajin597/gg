@@ -371,8 +371,27 @@ def send_confirmation_email(request, booking_id):
 
         # Compose email message
         subject = 'Booking Confirmation'
-        message = f'Dear User, \n\nYour booking details are as follows: \nShow: {booking.show} \nNumber of Tickets: {booking.number_of_tickets} \nTotal Amount: {booking.total_amount} \nTime: {booking.show.time} \ndate: {booking.show.date} \nTicket Price: {booking.ticket_price} \nRazorpay Order ID: {booking.razorpay_order_id} \nPayment Status: {booking.payment_status} \n\nTo verify your booking, please click on the following link: {verification_link} \n\nThank you for choosing our service.'
-        from_email = 'cjebin9@gmail.com' 
+        message = f"""
+Dear {booking.user},  
+
+Your booking has been confirmed! 🎟️  
+
+📽️ *Show:* {booking.show}  
+📅 *Date:* {booking.show.date}  
+⏰ *Time:* {booking.show.time}  
+🎫 *Tickets:* {booking.number_of_tickets}  
+💰 *Total Amount:* ₹{booking.total_amount}  
+💳 *Payment Status:* {booking.payment_status}  
+🆔 *Razorpay Order ID:* {booking.razorpay_order_id}  
+
+🔗 Click below to view your ticket and details:  
+{verification_link}  
+
+Enjoy the show! 🍿✨  
+Thank you for booking with us.  
+"""
+
+        from_email = 'no-reply@theatre.com' 
         to_email = [user_email]
 
         # Send email
@@ -464,3 +483,95 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         call_command('migrate')
+
+
+
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import razorpay
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Refund
+
+# Razorpay API setup
+RAZORPAY_KEY_ID = "your_razorpay_key_id"
+RAZORPAY_SECRET = "your_razorpay_secret"
+client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_SECRET))
+
+@csrf_exempt  # 🚀 This disables CSRF protection for this API
+def process_refund(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("payment_id")
+        email = request.POST.get("email")
+
+        try:
+            refund = client.payment.refund(payment_id)
+            Refund.objects.create(
+                payment_id=payment_id,
+                refund_id=refund["id"],
+                email=email,
+                amount=100,  # Modify based on your use case
+                status="processed"
+            )
+
+            send_mail(
+                subject="Refund Processed",
+                message=f"Your refund for payment {payment_id} has been processed successfully.",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+            return JsonResponse({"message": "Refund processed successfully!", "refund_id": refund["id"]}, status=200)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+# Configure Razorpay API
+RAZORPAY_KEY_ID = "rzp_test_H8tj7QU829vkdv"
+RAZORPAY_SECRET = "2sFLB15B4yMPMmScPFTh9IIw"
+
+client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_SECRET))
+
+def process_refund(request):
+    if request.method == "POST":
+        payment_id = request.POST.get("payment_id")
+        email = request.POST.get("email")
+        amount = 1000  # Set the refund amount (in paisa for Razorpay, e.g., 100 = ₹1)
+
+        try:
+            # Create refund request in Razorpay
+            refund = client.payment.refund(payment_id, {"amount": amount})
+
+            # Save refund details in the database
+            refund_obj = Refund.objects.create(
+                payment_id=payment_id,
+                refund_id=refund["id"],
+                email=email,
+                amount=amount / 100,  # Convert to rupees
+                status="processed"
+            )
+
+            # Send refund confirmation email
+            send_mail(
+                subject="Refund Processed Successfully",
+                message=f"Your refund for payment {payment_id} has been processed successfully.\n\nRefund ID: {refund['id']}",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+            return JsonResponse({"message": "Refund processed and email sent!", "refund_id": refund["id"]}, status=200)
+
+        except razorpay.errors.BadRequestError:
+            return JsonResponse({"error": "Invalid payment ID or refund failed."}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+

@@ -156,6 +156,9 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS
+CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript access
 
 
 
@@ -172,13 +175,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'cjebin9@gmail.com'
-EMAIL_HOST_PASSWORD = 'valchleyikulpfhk'
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # SMTP server hostname
+EMAIL_PORT = 465  # SMTP server port (587 for TLS, 465 for SSL)
+EMAIL_HOST_USER = 'ajincc88@gmail.com'  # Your SMTP username
+EMAIL_HOST_PASSWORD = 'wbkq vcjk xrtw pjso'  # Your SMTP password
+#EMAIL_USE_TLS = True  # Enable TLS (for port 587)
+EMAIL_USE_SSL = True  # Enable SSL (for port 465)
 
 
 

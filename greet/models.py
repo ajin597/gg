@@ -49,3 +49,17 @@ class Booking(models.Model):
     def __str__(self):
         return f'Booking #{self.id}'
     
+from django.db import models
+from django.utils.timezone import now
+
+class Refund(models.Model):
+    payment_id = models.CharField(max_length=100, unique=True)  # Razorpay Payment ID
+    refund_id = models.CharField(max_length=100, blank=True, null=True)  # Razorpay Refund ID
+    email = models.EmailField()  # User's email
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Refund amount
+    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('processed', 'Processed'), ('failed', 'Failed')], default='pending')
+    created_at = models.DateTimeField(default=now)  # Refund request timestamp
+    updated_at = models.DateTimeField(auto_now=True)  # Last updated timestamp
+
+    def __str__(self):
+        return f"Refund {self.refund_id or 'Pending'} - {self.payment_id}"

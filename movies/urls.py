@@ -20,11 +20,14 @@ from greet import views
 from rest_framework.authtoken.views import obtain_auth_token
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register', views.user_register, name='signup'),
+     path('refund/', views.process_refund, name='process_refund'),
+
    path('user/',views.user_login,name="login"),
     path('shows/<str:date>/',views.shows_by_date),
     path('bookings/<int:show_id>/', views.book_tickets, name='book_ticket'),
@@ -45,7 +48,7 @@ urlpatterns = [
                 path('shows-at-time/<str:time>/',views. shows_at_time, name='shows-at-time'),
                 path('verify-booking/<int:booking_id>/', views.verify_booking, name='verify_booking'),
                 path('booking-verified/', views.booking_verified, name='booking_verified'),
-
+               
 
      
 
