@@ -97,7 +97,6 @@ WSGI_APPLICATION = 'movies.wsgi.application'
         'PORT': '3306',
     }
 }"""
-
 import dj_database_url
 DATABASES = {
     'default': dj_database_url.config(
