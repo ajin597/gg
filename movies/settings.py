@@ -163,7 +163,7 @@ RAZORPAY_KEY_SECRET = '2sFLB15B4yMPMmScPFTh9IIw'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-     "https://movies-118xahihy-ajis-projects-3156c685.vercel.app",  # React development server URL
+     "https://movies-7m5amtmqy-ajis-projects-3156c685.vercel.app",  # React development server URL
 ]
 
 
