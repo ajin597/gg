@@ -97,6 +97,7 @@ WSGI_APPLICATION = 'movies.wsgi.application'
         'PORT': '3306',
     }
 }"""
+
 import dj_database_url
 
 DATABASES = {
@@ -194,6 +195,7 @@ EMAIL_HOST_PASSWORD = 'wbkq vcjk xrtw pjso'  # Your SMTP password
 #EMAIL_USE_TLS = True  # Enable TLS (for port 587)
 EMAIL_USE_SSL = True  # Enable SSL (for port 465)
 
+CORS_ALLOW_CREDENTIALS = True
 
 
 import os
